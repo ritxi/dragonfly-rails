@@ -8,6 +8,7 @@ module Kaltha
             options = options.last 
             set_df_scope(options[:scope]) if options[:scope]
           end
+          send :include, ::Kaltha::CustomPathExtension
           image_accessor accessor
         end
         def df_scope
@@ -19,16 +20,21 @@ module Kaltha
           @scope = scope
         end
       end
-      class Attachment
-        def initialize(model)
-          @model = model
-          self.uid = model_uid
-          update_from_uid if uid
-          @should_run_callbacks = true
-          self.class.ensure_uses_cached_magic_attributes
-          root_path = app.datastore.configuration[:root_path]
-          app.datastore.scope_for = @model
-        end
+    end
+  end
+end
+
+module Dragonfly
+  module ActiveModelExtensions
+    class Attachment
+      def initialize(model)
+        @model = model
+        self.uid = model_uid
+        update_from_uid if uid
+        @should_run_callbacks = true
+        self.class.ensure_uses_cached_magic_attributes
+        root_path = app.datastore.configuration[:root_path]
+        app.datastore.scope_for = @model
       end
     end
   end
