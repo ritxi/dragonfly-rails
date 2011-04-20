@@ -1,4 +1,4 @@
-module Kaltha
+module DragonflyRails
   module StoringScope
     module Tools
       def id_partition *options

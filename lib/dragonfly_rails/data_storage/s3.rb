@@ -1,7 +1,7 @@
 module Dragonfly
   module DataStorage
     class S3DataStore
-      include ::Kaltha::StoringScope
+      include ::DragonflyRails::StoringScope
       def path
         %w(p)
       end

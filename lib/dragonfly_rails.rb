@@ -1,8 +1,8 @@
 require 'dragonfly'
 require 'rails'
-%w(active_model_extension data_storage model_extension railtie version).each{|lib| require File.join %W(kaltha #{lib})}
+%w(active_model_extension data_storage model_extension railtie version).each{|lib| require File.join %W(dragonfly_rails #{lib})}
 
-module Kaltha
+module DragonflyRails
   mattr_accessor :security_key
   @@security_key = 'kaltha'
   
@@ -14,6 +14,5 @@ module Kaltha
   
   mattr_accessor :assets_path
   @@assets_path = :default # ::Rails.root.join('public','assets')
-  
 end
 

@@ -1,4 +1,4 @@
-module Kaltha
+module DragonflyRails
   module CustomPathExtension
     TO_BE_MIGRATE=true
     def path_style

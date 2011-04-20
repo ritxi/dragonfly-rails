@@ -2,18 +2,18 @@ require File.expand_path('../../test_helper', __FILE__)
 
 
 class Tools
-  extend ::Kaltha::StoringScope::Tools
+  extend ::DragonflyRails::StoringScope::Tools
 end
-class KalthaTest < Test::Unit::TestCase
+class DragonflyRailsTest < Test::Unit::TestCase
   def setup
     @file_path = File.expand_path('../../fixtures/image/Unknown.jpeg', __FILE__)
   end
   
   should "Get application configuration" do
     config = Rails.configuration
-    assert_equal('hello', config.kaltha.security_key)
-    assert_equal(true, config.kaltha.protect_from_dos_attacks)
-    assert_equal('photos', config.kaltha.route_path)
+    assert_equal('hello', config.dragonflyrails.security_key)
+    assert_equal(true, config.dragonflyrails.protect_from_dos_attacks)
+    assert_equal('photos', config.dragonflyrails.route_path)
   end
   should "Get id_partition path" do
     assert_equal('000/000/001', Tools.id_partition(1))
@@ -24,8 +24,8 @@ class KalthaTest < Test::Unit::TestCase
   should "have image_accessor class method" do
     assert(User.respond_to?(:image_accessor))
   end
-  should "have kaltha_dragonfly_for class method" do
-    assert(User.respond_to?(:kaltha_dragonfly_for))
+  should "have dragonfly_for class method" do
+    assert(User.respond_to?(:dragonfly_for))
   end
   should "have partion_style instace method" do
     assert(User.new.respond_to?(:path_style))

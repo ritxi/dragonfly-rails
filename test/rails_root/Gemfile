@@ -6,8 +6,8 @@ gem 'rails', '3.0.7'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3'
-gem 'kaltha', :path => '../..'
 gem 'dragonfly', :path => '~/dragonfly'
+gem 'dragonfly-rails', :path => '../..', :require => 'dragonfly_rails'
 # Use unicorn as the web server
 # gem 'unicorn'
 

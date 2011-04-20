@@ -39,9 +39,9 @@ module RailsRoot
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     
-    config.kaltha.security_key = 'hello'
-    config.kaltha.protect_from_dos_attacks = true
-    config.kaltha.route_path = 'photos'
+    config.dragonflyrails.security_key = 'hello'
+    config.dragonflyrails.protect_from_dos_attacks = true
+    config.dragonflyrails.route_path = 'photos'
     
     
   end
