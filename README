@@ -3,14 +3,13 @@ Adds model path scope customization to Dragonfly
 Dragonfly store files using the current time, but for paperclip compatibility with this plugin you can make Dragonfly to save files on /model_table_name/:id_partition
 
 class User < ActiveRecord::Base
-  set_df_scope 'avatars'
-  image_accessor :df_avatar
+  dragonfly_for :avatar_file, :scope => 'avatars'
 end
 
 User avatar files will be stored as /avatars/000/000/001/filename_original.jpg
 
 class Image < ActiveRecord::Base
-  image_accessor :df_image
+  dragonfly_for :file # scope defaults to 'images'
 end
 
 Image files will be stored as /images/000/000/001/filename_original.jpg
