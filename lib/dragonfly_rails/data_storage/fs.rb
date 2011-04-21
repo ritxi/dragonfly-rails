@@ -1,4 +1,3 @@
-puts "Loading Filesystem"
 module Dragonfly
   module DataStorage
     class FileDataStore

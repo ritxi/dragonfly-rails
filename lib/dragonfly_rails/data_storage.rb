@@ -2,13 +2,10 @@ module DragonflyRails
   module StoringScope
     module Tools
       def id_partition *options
-        puts "running id partition path!!!"
         model_id = options.first
-        puts "Model id: #{model_id}"
         ("%09d" % model_id).scan(/\d{3}/).join("/")
       end
       def time_partition *options
-        puts "running time partition path!!!"
         ::File.join(Time.now.strftime('%Y/%m/%d/%H/%M/%S'), rand(1000))
       end
       def filename_for(file)
@@ -18,8 +15,6 @@ module DragonflyRails
     
     def scope_for=(model_object)
       @model = model_object
-      puts "Path: #{path}"
-      puts "Class Tools: #{self.class.to_s}"
       @custom_scope = ::File.join(path, ((@model.class.respond_to?('df_scope') && @model.class.df_scope) ? @model.class.df_scope : @model.class.table_name))
     end
     

@@ -3,23 +3,18 @@ module DragonflyRails
   class Railtie < ::Rails::Railtie
     config.dragonflyrails = DragonflyRails
     initializer 'dragonfly_rails.extend_dragonfly', :before => 'dragonfly_rails.active_record' do
-      puts "1"
-      ds_type = (Rails.env.production? || Rails.env.staging?) ? 's3' : 'fs'
-      puts ds_type
-      require File.expand_path("../data_storage/#{ds_type}", __FILE__)
+      datastore_type = (Rails.env.production? || Rails.env.staging?) ? 's3' : 'fs'
+      require File.expand_path("../data_storage/#{datastore_type}", __FILE__)
     end
     initializer 'dragonfly_rails.active_record' do
-      puts "2"
       ActiveRecord::Base.send(:extend, ::DragonflyRails::Dragonfly::ActiveModelExtensions::ClassMethods)
       ActiveRecord::Base.send(:include, ::DragonflyRails::CustomPathExtension)
     end
     initializer 'dragonfly_rails.load_extension', :after => 'dragonfly_rails.active_record' do
-      puts "3"
       @app = ::Dragonfly[:images]
       @app.configure_with(:rails)
       @app.configure_with(:imagemagick)
       if Rails.env.production? || Rails.env.staging?
-        puts "Production!"
         @app.configure_with(:heroku, STORAGE_OPTIONS[:bucket])
       else
         Rails.configuration.dragonflyrails.assets_path = Rails.root.join('public','assets') if Rails.configuration.dragonflyrails.assets_path == :default
