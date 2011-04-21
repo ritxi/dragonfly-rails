@@ -27,13 +27,9 @@ end
 module Dragonfly
   module ActiveModelExtensions
     class Attachment
+      alias_method :original_initialize, :initialize
       def initialize(model)
-        @model = model
-        self.uid = model_uid
-        update_from_uid if uid
-        @should_run_callbacks = true
-        self.class.ensure_uses_cached_magic_attributes
-        root_path = app.datastore.configuration[:root_path]
+        original_initialize(model)
         app.datastore.scope_for = @model
       end
     end
