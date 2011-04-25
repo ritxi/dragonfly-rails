@@ -5,7 +5,7 @@ module DragonflyRails
         def dragonfly_for(*options)
           
           accessor = options.first
-          #puts "Registering accessor(#{accessor.class.to_s})!"
+     
           if options.size == 2
             options = options.last 
             set_df_scope(options[:scope]) if options[:scope]

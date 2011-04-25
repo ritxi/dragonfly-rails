@@ -9,10 +9,12 @@ module DragonflyRails
     def path_style
       @path_style ||= :id_partition
     end
-    def create_dragonfly_uid
-      if path = (avatar and avatar.path(:original))
-        new_path = path[%r{\d+/.*_original.*$}]
-        update_attribute(:df_avatar_uid, "/#{self.class.df_scope}/#{new_path}")
+    def create_dragonfly_uid(df_uid_field,paperclip_accessor, options = {})
+      options = {:original_size => :original}.merge(options)
+      path = send(paperclip_accessor).path(options[:original_size])
+      if send(df_uid_field).nil? && path
+        new_path = path[%r{\w{1,}\/(\d{3}\/){3}.*}]
+        update_attribute(df_uid_field, new_path)
       end
     end
   end

@@ -25,7 +25,7 @@ module DragonflyRails
           @app.configure_with(:heroku, STORAGE_OPTIONS[:bucket])
         else
           if c.datastore.is_a?(::Dragonfly::DataStorage::FileDataStore)
-            c.datastore.root_path = config.assets_path
+            c.datastore.root_path = config.assets_path.to_s
             c.datastore.server_root = ::Rails.root.join('public').to_s
           end
         end
@@ -34,8 +34,8 @@ module DragonflyRails
       end
       @app.define_macro(::ActiveRecord::Base, :image_accessor)
     end
-    config.app_middleware do
-      insert_after 'Rack::Lock', 'Dragonfly::Middleware', :images, "/#{Rails.configuration.dragonflyrails.route_path}"
+    initializer 'load asset dispatcher', :after => 'dragonfly_rails.load_extension' do |app|
+      app.middleware.insert_after ::Rack::Lock, ::Dragonfly::Middleware, :images
     end
     # railtie code goes here
   end
