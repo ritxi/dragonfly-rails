@@ -1,6 +1,6 @@
 require 'dragonfly'
 require 'rails'
-%w(active_model_extension data_storage model_extension railtie version).each{|lib| require File.join %W(dragonfly_rails #{lib})}
+%w(active_model_extension data_storage model_extension image_magick/utils railtie version).each{|lib| require File.join %W(dragonfly_rails #{lib})}
 
 module DragonflyRails
   mattr_accessor :security_key

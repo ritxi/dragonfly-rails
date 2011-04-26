@@ -1,3 +1,1 @@
-FIX: files saved from paperclip using names containing spaces
-
 Feature: allow define a default image in case non is specified
