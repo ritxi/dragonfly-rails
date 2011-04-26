@@ -3,7 +3,7 @@ module Dragonfly
     class S3DataStore
       include ::DragonflyRails::StoringScope
       def path
-        %w(p)
+        [Rails.env.first]
       end
       def generate_uid(name)
         generate_path(name)
