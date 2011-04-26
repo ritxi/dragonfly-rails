@@ -9,6 +9,12 @@ module DragonflyRails
           if options.size == 2
             options = options.last 
             set_df_scope(options[:scope]) if options[:scope]
+            if options[:with_paperclip]
+              df_uid = "#{accessor}_uid".to_sym
+              paperclip_accessor = options[:with_paperclip]
+              after_create lambda{ create_dragonfly_uid(df_uid, paperclip_accessor)}, :unless => df_uid
+              after_update lambda{ update_dragonfly_uid(df_uid, paperclip_accessor)}, :if => lambda {changed.include?("#{paperclip_accessor}_updated_at")}
+            end
           end
           send :include, ::DragonflyRails::CustomPathExtension
           df_rails_image_accessor accessor

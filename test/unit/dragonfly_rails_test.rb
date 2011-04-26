@@ -4,6 +4,7 @@ require File.expand_path('../../test_helper', __FILE__)
 class DragonflyRailsTest < Test::Unit::TestCase
   def setup
     @file_path = File.expand_path('../../fixtures/image/Unknown.jpg', __FILE__)
+    @file_path2 = File.expand_path('../../fixtures/image/Participa original.jpg', __FILE__)
     config = Rails.configuration
     FileUtils::rm_rf config.dragonfly_rails.assets_path
     @tools = ::DragonflyRails::StoringScope::Tools
@@ -57,11 +58,21 @@ class DragonflyRailsTest < Test::Unit::TestCase
   
   should "Get image uid(with default scope)" do
     params = { :image => File.open(@file_path) }
-    user = Image.new(params)
-    path_style = user.path_style
+    image = Image.new(params)
+    path_style = image.path_style
     assert_equal(:id_partition, path_style)
-    user.save
-    assert_equal('images/000/000/001/Unknown.jpg', user.image_uid)
+    image.save
+    assert_equal('images/000/000/001/Unknown.jpg', image.image_uid)
   end
-  
+  should "update image" do
+    params = { :image => File.open(@file_path) }
+    image = Image.new(params)
+    path_style = image.path_style
+    assert_equal(:id_partition, path_style)
+    image.save
+    assert_equal('images/000/000/002/Unknown.jpg', image.image_uid)
+    image.image = File.open(@file_path2)
+    image.save
+    assert_equal('images/000/000/002/Participa_original.jpg', image.image_uid)
+  end
 end

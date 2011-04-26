@@ -17,5 +17,12 @@ module DragonflyRails
         update_attribute(df_uid_field, new_path)
       end
     end
+    def update_dragonfly_uid(df_uid_field,paperclip_accessor, options = {})
+      options = {:original_size => :original}.merge(options)
+      path = send(paperclip_accessor).path(options[:original_size])
+      df_path = send(df_uid_field)
+      new_path = path[%r{\w{1,}\/(\d{3}\/){3}.*}]
+      update_attribute(df_uid_field, new_path) if new_path != df_path
+    end
   end
 end

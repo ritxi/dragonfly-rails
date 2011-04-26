@@ -9,4 +9,11 @@ ActiveRecord::Schema.define do
     t.column "description", :text
     t.column "image_uid", :string
   end
+  create_table 'old_paperclips', :force => true do |t|
+    t.string   :paperclip_uid
+    t.string   :pc_paperclip_file_name
+    t.string   :pc_paperclip_content_type
+    t.integer  :pc_paperclip_file_size
+    t.datetime :pc_paperclip_updated_at
+  end
 end
