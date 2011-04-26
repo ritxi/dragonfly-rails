@@ -38,6 +38,13 @@ module Dragonfly
         end
         if path_style == :id_partition && !new_record?
           original_save_dragonfly_attachments
+          dragonfly_attachments.each do |attribute, attachment|
+            uid = "#{attribute}_uid"
+            if eval("!@saved_#{uid}") and changes[uid] and changes[uid].first.nil?
+              eval("@saved_#{uid} = true")
+              save!
+            end
+          end
         end
       end
     end
