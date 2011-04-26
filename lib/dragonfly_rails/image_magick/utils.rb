@@ -9,7 +9,7 @@ module Dragonfly
       end
 
       def raw_identify(temp_object, args='')
-        run "#{identify_command} #{args} #{temp_object.path}"
+        run "#{identify_command} #{args} '#{temp_object.path}'"
       end
     end
   end
