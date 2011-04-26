@@ -26,62 +26,63 @@ Image files will be stored as /images/000/000/001/filename_original.jpg
 
 === App configuration (config/application.rb)
 
-  config.dragonfly_rails.security_key = 'mysecretkey'
-  config.dragonfly_rails.protect_from_dos_attacks = true
-  config.dragonfly_rails.route_path = 'media' # /media
+    config.dragonfly_rails.security_key = 'mysecretkey'
+    config.dragonfly_rails.protect_from_dos_attacks = true
+    config.dragonfly_rails.route_path = 'media' # /media
   
-  # Default is Rails.root.join('public','assets'), this will only be used on local development environment, I expect production to use amazon and heroku
-  config.dragonfly_rails.assets_path = 'local/path/where/assets/should/be/stored'
-
+    # Default is Rails.root.join('public','assets'), this will only be used on local development environment.
+    # On production environment is expected to use amazon and heroku.
+    config.dragonfly_rails.assets_path = 'local/path/where/assets/should/be/stored'
 === Model setup
 
 ==== Default Images scope is good for you?
 
-  class Image < ActiveRecord::Base
-    dragonfly_for :file # scope defaults to 'images'
-  end
-
-  # Add the following migration to your images migration file or add a new migration adding the file_uid field
-  create_table "images", :force => true do |t|
-    ...
-    t.column "file_uid", :string
-  end
-
+    class Image < ActiveRecord::Base
+      dragonfly_for :file # scope defaults to 'images'
+    end
+  
+    # Add the following migration to your images migration file or add a new migration adding the file_uid field
+    create_table "images", :force => true do |t|
+      ...
+      t.column "file_uid", :string
+    end
+    
 ==== Prefere custom scope?
 
+    class User < ActiveRecord::Base
+      dragonfly_for :avatar_file, :scope => 'avatars'
+    end
   
-  class User < ActiveRecord::Base
-    dragonfly_for :avatar_file, :scope => 'avatars'
-  end
-  
-  # Add the following migration to your images migration file or add a new migration adding the avatar_file_uid field
-  create_table "users", :force => true do |t|
-    ...
-    t.column "avatar_file_uid", :string
-  end
+    # Add the following migration to your images migration file or add a new migration adding the avatar_file_uid field
+    create_table "users", :force => true do |t|
+      ...
+      t.column "avatar_file_uid", :string
+    end
+    
 == Using both Paperclip and Dragonfly
-  If you want to continue to use Paperclip, but have the ability to use Dragonfly you can pass the :with_paperclip option so Paperclip will be the master accessor and Dragonfly _uid field will be updated when Paperclip fields are updated.
-  class User < ActiveRecord::Base
-    dragonfly_for :avatar_file, :scope => 'avatars', :with_paperclip => :pc_avatar
-    has_attached_file :pc_avatar,
-                      {:styles => {
-                        :thumb => '50x50>',
-                        :original => '1200x1200>'},
-                      :default_style => :thumb,
-                     :path => ":root_path/paperclips/:id_partition/:basename_:style.:extension",
-                     :url => "/:environment/paperclips/:id_partition/:basename_:style.:extension"}
-  end
-  
-  On your forms file_field :pc_avatar must be used:
-  
-  <% form_for :user, :html => { :multipart => true } do |form| %>
-    <%= form.file_field :pc_avatar %>
-  <% end %>
-  
+If you want to continue to use Paperclip, but have the ability to use Dragonfly you can pass the :with_paperclip option so Paperclip will be the master accessor and Dragonfly _uid field will be updated when Paperclip fields are updated.
+
+    class User < ActiveRecord::Base
+      dragonfly_for :avatar_file, :scope => 'avatars', :with_paperclip => :pc_avatar
+      has_attached_file :pc_avatar,
+                        {:styles => {
+                          :thumb => '50x50>',
+                          :original => '1200x1200>'},
+                        :default_style => :thumb,
+                       :path => ":root_path/paperclips/:id_partition/:basename_:style.:extension",
+                       :url => "/:environment/paperclips/:id_partition/:basename_:style.:extension"}
+    end
+
+On your forms file_field :pc_avatar must be used:
+
+    <% form_for :user, :html => { :multipart => true } do |form| %>
+      <%= form.file_field :pc_avatar %>
+    <% end %>
+
 == Paperclip migration
 
 Create a rake task with / Run the following code
 
-  User.each do |u|
-    u.create_dragonfly_uid(:avatar_file_uid, :paper_clip_accessor)
-  end
+    User.each do |u|
+      u.create_dragonfly_uid(:avatar_file_uid, :paper_clip_accessor)
+    end
