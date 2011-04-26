@@ -34,9 +34,27 @@ module DragonflyRails
       end
       @app.define_macro(::ActiveRecord::Base, :image_accessor)
     end
-    initializer 'load asset dispatcher', :after => 'dragonfly_rails.load_extension' do |app|
+
+    initializer 'load assets dispatcher', :after => 'dragonfly_rails.load_extension' do |app|
       app.middleware.insert_after ::Rack::Lock, ::Dragonfly::Middleware, :images
     end
+
+    initializer 'dragonfly filesistem cache', :after => 'load assets dispatcher' do |app|
+      if ::Dragonfly[:images].datastore.is_a?(::Dragonfly::DataStorage::FileDataStore)
+        begin
+          require 'uri'
+          require 'rack/cache'
+          Rails.application.middleware.insert_before 'Dragonfly::Middleware', 'Rack::Cache', {
+            :verbose     => true,
+            :metastore   => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/meta"), # URI encoded because Windows
+            :entitystore => URI.encode("file:#{Rails.root}/tmp/dragonfly/cache/body")  # has problems with spaces
+          }
+        rescue LoadError => e  
+          app.log.warn("Warning: couldn't find rack-cache for caching dragonfly content")
+        end
+      end
+    end
+
     # railtie code goes here
   end
 end
