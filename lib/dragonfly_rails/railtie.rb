@@ -22,7 +22,7 @@ module DragonflyRails
         c.secret = config.security_key
         c.log = ::Rails.logger
         if ::Rails.env.production? || ::Rails.env.staging?
-          @app.configure_with(:heroku, STORAGE_OPTIONS[:bucket])
+          @app.configure_with(:heroku, ::STORAGE_OPTIONS[:bucket])
         else
           if c.datastore.is_a?(::Dragonfly::DataStorage::FileDataStore)
             c.datastore.root_path = config.assets_path.to_s
