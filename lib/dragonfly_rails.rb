@@ -14,5 +14,8 @@ module DragonflyRails
   
   mattr_accessor :assets_path
   @@assets_path = :default # ::Rails.root.join('public','assets')
+  
+  mattr_accessor :storage_options
+  @@storage_options = {:storage => :filesystem}
 end
 
