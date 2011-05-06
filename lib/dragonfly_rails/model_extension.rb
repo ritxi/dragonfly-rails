@@ -10,19 +10,22 @@ module DragonflyRails
       @path_style ||= :id_partition
     end
     def create_dragonfly_uid(df_uid_field,paperclip_accessor, options = {})
-      options = {:original_size => :original}.merge(options)
-      path = send(paperclip_accessor).path(options[:original_size])
+      path = new_dagronfly_path(df_uid_field,paperclip_accessor, options)
       if send(df_uid_field).nil? && path
-        new_path = path[%r{\w{1,}\/(\d{3}\/){3}.*}]
-        update_attribute(df_uid_field, new_path)
+        update_attribute(df_uid_field, generate_path(path))
       end
     end
     def update_dragonfly_uid(df_uid_field,paperclip_accessor, options = {})
+      current_path = send(df_uid_field)
+      path = new_dagronfly_path(df_uid_field,paperclip_accessor, options)
+      update_attribute(df_uid_field, generate_path(path)) if generate_path(path) != current_path
+    end
+    def new_dagronfly_path(df_uid_field,paperclip_accessor, options = {})
       options = {:original_size => :original}.merge(options)
-      path = send(paperclip_accessor).path(options[:original_size])
-      df_path = send(df_uid_field)
-      new_path = path[%r{\w{1,}\/(\d{3}\/){3}.*}]
-      update_attribute(df_uid_field, new_path) if new_path != df_path
+      send(paperclip_accessor).path(options[:original_size])
+    end
+    def generate_path(path)
+      ::File.join(Rails.env.first.to_s, path[%r{\w{1,}\/(\d{3}\/){3}.*}])
     end
   end
 end

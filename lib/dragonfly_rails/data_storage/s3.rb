@@ -8,7 +8,7 @@ module Dragonfly
         bname
       end
       def path
-        [Rails.env.first]
+        [::Rails.env.first]
       end
       def generate_uid(name)
         ::File.join(path, generate_path(name))
