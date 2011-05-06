@@ -42,7 +42,15 @@ module RailsRoot
     config.dragonfly_rails.security_key = 'hello'
     config.dragonfly_rails.protect_from_dos_attacks = true
     config.dragonfly_rails.route_path = 'photos'
-    
+    config.dragonfly_rails.storage_options = {
+      :storage => :s3,
+      :s3_credentials => File.join(Rails.root, 'config', 's3.yml'),
+      :url => ':s3_alias_url',
+      :s3_host_alias => lambda { |img| img.instance.s3_host},
+      :bucket => Proc.new { |img| img.instance.bucket_name},
+      :df_bucket => Proc.new { |img| img.bucket_name},
+      :s3_permissions => 'public-read', :s3_protocol => 'http'
+    }
     
   end
 end
