@@ -1,7 +1,7 @@
 require 'dragonfly'
 require 'rails'
 require 'paperclip'
-require 'paperclip_s3'
+#require 'paperclip_s3'
 %w(active_model_extension data_storage model_extension image_magick/utils railtie version).each{|lib| require File.join %W(dragonfly_rails #{lib})}
 %w(heroku).each{|lib| require File.join %W(dragonfly_rails config #{lib})}
 module DragonflyRails
