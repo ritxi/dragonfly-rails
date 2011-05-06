@@ -1,0 +1,15 @@
+credentials: &credentials
+  access_key_id: aljksdfalñsdfjklñasdjfkl
+  secret_access_key: asñlkdjfñlaksjdflñkajsdfklñañsdjaklñ
+
+development:
+  <<: *credentials
+
+test:
+  <<: *credentials
+
+staging:
+  <<: *credentials
+
+production:
+  <<: *credentials
