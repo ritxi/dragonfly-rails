@@ -1,8 +1,8 @@
 == About dragonfly-rails
 
-It's a rail engine that loads dragonfly gem adding scope and id_partion storing style. It let paperclip users to migrate to this solution when require more image size flexibility without loosing this file storing structure.
+It's a rails engine that loads dragonfly gem, adding scope and id_partion storing style. It allows paperclip users to migrate to this solution when more image size flexibility is required, without losing paperclip's file storing structure.
 
-Dragonfly store files using the current time, but for paperclip you can make Dragonfly to save files at /:dragonfly_scope/:id_partition
+Dragonfly stores files using the current time, but for paperclip you can make Dragonfly to save files at /:dragonfly_scope/:id_partition
 
   class User < ActiveRecord::Base
     dragonfly_for :avatar_file, :scope => 'avatars'
@@ -30,18 +30,18 @@ Image files will be stored as /images/000/000/001/filename_original.jpg
     config.dragonfly_rails.protect_from_dos_attacks = true
     config.dragonfly_rails.route_path = 'media' # /media
   
-    # Default is Rails.root.join('public','assets'), this will only be used on local development environment.
+    # Default is Rails.root.join('public','assets'), this will only be used on development environment.
     # On production environment is expected to use amazon and heroku.
     config.dragonfly_rails.assets_path = 'local/path/where/assets/should/be/stored'
 === Model setup
 
-==== Default Images scope is good for you?
+==== Is Default Images scope good for you?
 
     class Image < ActiveRecord::Base
       dragonfly_for :file # scope defaults to 'images'
     end
   
-    # Add the following migration to your images migration file or add a new migration adding the file_uid field
+    # Add file_uid field to your images table.
     create_table "images", :force => true do |t|
       ...
       t.column "file_uid", :string
@@ -60,7 +60,7 @@ Image files will be stored as /images/000/000/001/filename_original.jpg
     end
     
 == Using both Paperclip and Dragonfly
-If you want to continue to use Paperclip, but have the ability to use Dragonfly you can pass the :with_paperclip option so Paperclip will be the master accessor and Dragonfly _uid field will be updated when Paperclip fields are updated.
+If you want to continue to use Paperclip, but retain the ability to use Dragonfly, you can pass the :with_paperclip option so Paperclip will be the master accessor and Dragonfly _uid field will be updated when Paperclip fields are updated.
 
     class User < ActiveRecord::Base
       dragonfly_for :avatar_file, :scope => 'avatars', :with_paperclip => :pc_avatar
